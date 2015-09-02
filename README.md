@@ -9,6 +9,6 @@ Ein Programm zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot An
 
 ## Anforderungen
 
-* Flip-Dot Anzeige mit IBIS Bus Schnittstelle
-* Seriell zu IBIS Schnittstellen Konverter
-* .NET 4.0, VisualStudio 2013
+* Flip-Dot/LED Anzeige mit IBIS Bus Schnittstelle
+* Seriell zu IBIS Schnittstellen Konverter, siehe https://github.com/robotfreak/IBIScmdline/tree/master/IBIS-Wandler
+* .NET 4.0, VisualStudio 2013 o. 2015
