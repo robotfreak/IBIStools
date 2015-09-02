@@ -1,6 +1,9 @@
-# IBIStool
+# IBIStools
 
-Ein Programm zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot Anzeigen (Bus Anzeigen) mit serieller Schnittstelle.
+Programmme zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot Anzeigen (Bus Anzeigen) mit serieller Schnittstelle.
+
+* IBIScmdline Kommandozeilentool. Aufruf 'IBIScmdline COM1 "l123"
+* IBISui grafische Oberfläche zur Ansteuerung vin IBIS Linien- bzw. Haltestellen-Anzeigen.
 
 ## Features
 
@@ -9,6 +12,6 @@ Ein Programm zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot An
 
 ## Anforderungen
 
-* Flip-Dot/LED Anzeige mit IBIS Bus Schnittstelle
+* Flip-Dot/LED Anzeige mit IBIS Bus-Schnittstelle
 * Seriell zu IBIS Schnittstellen Konverter, siehe [IBIS-Wandler](https://github.com/robotfreak/IBIScmdline/tree/master/IBIS-Wandler)
 * .NET 4.0, VisualStudio 2013 o. 2015
