@@ -10,13 +10,13 @@
 
 ##v1.0.0.9  vom 07.09.2015
 
-* kleinere Bug Fixes
+* diverse Bug Fixes
 
 ##v1.0.0.8  vom 06.09.2015
 
-* Feature LA Typ DS001neu
-* Feature HSA Typ DS003c
-* Feature Setup für LA, ZA, HSA Typ Umschaltung, HSA Länge
+* Feature: LA Typ DS001neu
+* Feature: HSA Typ DS003c
+* Feature: Setup für LA, ZA, HSA Typ Umschaltung, HSA Länge
 * Feature: RAW Mode Direktes Senden von Nachrichten 
 
 ##v1.0.0.7 - v1.0.0.1
