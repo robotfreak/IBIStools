@@ -14,4 +14,7 @@ Programmme zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot Anze
 
 * Flip-Dot/LED Anzeige mit IBIS Bus-Schnittstelle
 * Seriell zu IBIS Schnittstellen Konverter, siehe [IBIS-Wandler](https://github.com/robotfreak/IBIScmdline/tree/master/IBIS-Wandler)
-* .NET 4.0, VisualStudio 2013 o. 2015
+* .NET 4.0, VisualStudio 2015
+
+Eine lauffähige Version der IBISui kann hier heruntergeladen werden:
+[IBISui](http://www.robotfreal.de/IBISui/publish.htm)
