@@ -132,11 +132,20 @@ namespace IBIScmdline
             char ibisParity;
             //first make sure the port is open
             //if its not open then open it
-            if (!(comPort.IsOpen == true)) comPort.Open();
+            try
+            {
+                if (!(comPort.IsOpen == true)) comPort.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             // replace special characters in string 
             ibisSCMsg = ReplaceIbisSC(msg);
             // calculate parity Byte
             ibisParity = GetIbisParity(ibisSCMsg + '\r');
+            //display the data to the user
+            Console.WriteLine("out> " + ibisSCMsg + "<CR>" + "<" + Convert.ToString(ibisParity, 16) + ">");
             if (_emulate7e1 == true)
             {
                 // emulate even parity
@@ -148,10 +157,19 @@ namespace IBIScmdline
             }
             //send the message to the port
             //comPort.Write(ibisSndMsg, 0, ibisSndMsg.Length);
-            for(int i=0; i<ibisSndMsg.Length; i++)
+            try
             {
-                comPort.Write(ibisSndMsg, i, 1);
-                System.Threading.Thread.Sleep(20);
+                for (int i = 0; i < ibisSndMsg.Length; i++)
+                {
+                    comPort.Write(ibisSndMsg, i, 1);
+                    System.Threading.Thread.Sleep(20);
+                }
+                //display the data to the user
+                //Console.WriteLine("out> " + ByteToHex(ibisSndMsg) );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         #endregion
@@ -297,18 +315,34 @@ namespace IBIScmdline
                 //now open the port
                 comPort.Open();
                 //display message
-                //DisplayData(MessageType.Normal, "Port opened at " + DateTime.Now + "\n");
-                //return true
+                Console.WriteLine("Port " + comPort.PortName + " opened at " + DateTime.Now );
                 return true;
             }
             catch (Exception ex)
             {
-                //DisplayData(MessageType.Error, ex.Message);
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
         #endregion
 
+        #region ClosePort
+        public bool ClosePort()
+        {
+            try
+            {
+                if (comPort.IsOpen == true) comPort.Close();
+                //display message
+                Console.WriteLine("Port " + comPort.PortName + " closed at " + DateTime.Now );
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        #endregion
 
         #region comPort_DataReceived
         /// <summary>
@@ -325,7 +359,7 @@ namespace IBIScmdline
             //read the data and store it
             comPort.Read(comBuffer, 0, bytes);
             //display the data to the user
-            //DisplayData(MessageType.Incoming, ByteToHex(comBuffer) + "\n");
+            Console.WriteLine("In  < " + ByteToHex(comBuffer) + "\n");
         }
         #endregion
     }

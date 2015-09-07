@@ -14,24 +14,93 @@ namespace IBISui
     /// </summary>
     public partial class MainWindow : Window
     {
+        Properties.Settings Props = null;
         SerialManager comm = new SerialManager();
         static Timer myTimer;
-        Boolean isOpen = false;
         Boolean isTimer = false;
+        private double timerInterval, timeLeft;
+        Boolean isOpen = false;
 
         public MainWindow()
         {
             InitializeComponent();
+            LoadSettings();
             getSerialPorts();
-            myTimer = new Timer(10000); // Set up the timer for 10 seconds
-                                        //
-                                        // Type "_timer.Elapsed += " and press tab twice.
-                                        //
-            mnuTimer5s.IsChecked = false;
-            mnuTimer10s.IsChecked = true;
-            mnuTimer20s.IsChecked = false;
-            mnuTimer30s.IsChecked = false;
+            InitTimer();
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            this.Title = "IBISui v" + version.ToString();
+        }
+
+        private void InitTimer()
+        {
+            timerInterval = Props.Timer;
+            timeLeft = timerInterval / 1000;
+            myTimer = new Timer(1000); // Set up the timer for 1 seconds
+                                              //
+                                              // Type "_timer.Elapsed += " and press tab twice.
+                                              //
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
+            if (timerInterval == 5000)
+                mnuTimer5s.IsChecked = true;
+            else if (timerInterval == 10000)
+                mnuTimer10s.IsChecked = true;
+            else if (timerInterval == 20000)
+                mnuTimer20s.IsChecked = true;
+            else if (timerInterval == 30000)
+                mnuTimer30s.IsChecked = true;
+        }
+
+        private void LoadSettings()
+        {
+            Props = new Properties.Settings();
+            comm.PortName = Props.ComPort;
+            cbLiniennummer.IsChecked = Props.Liniennummer;
+            cbSonderzeichen.IsChecked = Props.Sonderzeichen;
+            cbWagennummer.IsChecked = Props.Wagennummer;
+            if (Props.LA == "ds001")
+            {
+                mnuLAds001.IsChecked = true;
+                mnuLAds001neu.IsChecked = false;
+                txtLiniennummer.Text = "000";
+            }
+            if (Props.LA == "ds001neu")
+            {
+                mnuLAds001.IsChecked = false;
+                mnuLAds001neu.IsChecked = true;
+                txtLiniennummer.Text = "0000";
+            }
+            cbZieltext.IsChecked = Props.Zieltext;
+            if (Props.ZA == "ds003a")
+            {
+                mnuZAds003a.IsChecked = true;
+                mnuZAds003aMAS.IsChecked = false;
+            }
+            else if (Props.ZA == "ds3aMAS")
+            {
+                mnuZAds003a.IsChecked = false;
+                mnuZAds003aMAS.IsChecked = true;
+            }
+            cbHaltestelle.IsChecked = Props.Haltestelle;
+            txtHaltestelle.MaxLength = Convert.ToInt32(Props.HSAlen);
+            foreach(MenuItem item in mnuHSAlen.Items)
+            {
+                if (item.Header.ToString() == Props.HSAlen)
+                    item.IsChecked = true;
+                else
+                    item.IsChecked = false;
+            }
+            if (Props.HSA == "ds003c")
+            {
+                mnuHSAds003c.IsChecked = true;
+                mnuHSAds009.IsChecked = false;
+            }
+            else if (Props.HSA == "ds009")
+            {
+                mnuHSAds003c.IsChecked = false;
+                mnuHSAds009.IsChecked = true;
+            }
+            cbRAW.IsChecked = Props.RAW;
+            this.updateUI();
         }
 
         private void dlgOpenFile(object sender, RoutedEventArgs e)
@@ -70,13 +139,7 @@ namespace IBISui
             }
         }
 
-        private void txtLiniennummer_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !AreAllValidNumericChars(e.Text);
-            base.OnPreviewTextInput(e);
-        }
-
-        private void txtSonderzeichen_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void txtBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !AreAllValidNumericChars(e.Text);
             base.OnPreviewTextInput(e);
@@ -115,7 +178,8 @@ namespace IBISui
 
         private void mnuSerial_Click(object sender, RoutedEventArgs e)
         {
-            getSerialPorts();        }
+            getSerialPorts();
+        }
 
         private void mnuSerialPort_Click(object sender, RoutedEventArgs e)
         {
@@ -123,7 +187,33 @@ namespace IBISui
             comm.ClosePort();
             isOpen = false;
             comm.PortName = mi.Header.ToString();
+            Props.ComPort = comm.PortName;
             mi.IsChecked = true;
+            updateUI();
+        }
+
+        private string dec2hexString(string s)
+        {
+            int x = 0;
+            Int32.TryParse(s, out x);
+            string xstr = x.ToString("X4");
+            char[] chars = xstr.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (chars[i] == 'A') chars[i] = ':';
+                if (chars[i] == 'B') chars[i] = ';';
+                if (chars[i] == 'C') chars[i] = '<';
+                if (chars[i] == 'D') chars[i] = '=';
+                if (chars[i] == 'E') chars[i] = '>';
+                if (chars[i] == 'F') chars[i] = '?';
+            }
+            return new string (chars);
+        }
+
+        private string leftalignedString(string s, int desiredLength)
+        {
+            if (s.Length >= desiredLength) return s;
+            return s.PadRight(desiredLength);
         }
 
         private string centerString(string s, int desiredLength)
@@ -131,6 +221,21 @@ namespace IBISui
             if (s.Length >= desiredLength) return s;
             int firstpad = (s.Length + desiredLength) / 2;
             return s.PadLeft(firstpad).PadRight(desiredLength);
+        }
+
+        private string replaceString(string input, char csrc, char cdst)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException("input");
+            }
+            char[] chars = input.ToCharArray();
+
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (chars[i] == csrc) chars[i] = cdst;
+            }
+            return new string(chars);
         }
 
         private void sendIBIS()
@@ -151,27 +256,61 @@ namespace IBISui
             {
                 if (cbLiniennummer.IsChecked == true)
                 {
-                    comm.WriteIbisData("l" + txtLiniennummer.Text);
+                    if (mnuLAds001.IsChecked == true)
+                        comm.WriteIbisData("l" + txtLiniennummer.Text);
+                    else if (mnuLAds001neu.IsChecked == true)
+                        comm.WriteIbisData("q" + txtLiniennummer.Text);
                 }
                 if (cbSonderzeichen.IsChecked == true)
                 {
-                    comm.WriteIbisData("lE" + txtSonderzeichen.Text);
+                    if (mnuLAds001.IsChecked == true)
+                        comm.WriteIbisData("lE" + txtSonderzeichen.Text);
+                    else if (mnuLAds001neu.IsChecked == true)
+                        comm.WriteIbisData("qE" + txtSonderzeichen.Text);
                 }
-                if (cbZieltext1_2.IsChecked == true && cbZieltext3_4.IsChecked == true)
+                if (cbWagennummer.IsChecked == true)
+                {
+                    comm.WriteIbisData("nB" + dec2hexString(txtWagennummer.Text));
+                }
+                if (mnuZAds003aMAS.IsChecked == true && cbZieltext.IsChecked == true)
                 {
                     comm.WriteIbisData("zA4" + centerString(txtZieltext1.Text, txtZieltext1.MaxLength) + centerString(txtZieltext2.Text, txtZieltext2.MaxLength) + centerString(txtZieltext3.Text, txtZieltext3.MaxLength) + centerString(txtZieltext4.Text, txtZieltext4.MaxLength));
                 }
-                else if (cbZieltext1_2.IsChecked == true && cbZieltext3_4.IsChecked == false)
+                else if (mnuZAds003a.IsChecked == true && cbZieltext.IsChecked == true)
                 {
                     comm.WriteIbisData("zA2" + centerString(txtZieltext1.Text, txtZieltext1.MaxLength) + centerString(txtZieltext2.Text, txtZieltext2.MaxLength));
                 }
                 if (cbHaltestelle.IsChecked == true)
                 {
-                    comm.WriteIbisData("v" + centerString(txtHaltestelle.Text, txtHaltestelle.MaxLength));
+                    if (mnuHSAds003c.IsChecked == true)
+                    {
+                        string cmd = "";
+                        if (txtHaltestelle.MaxLength == 16)
+                            cmd = "zI4";
+                        else if (txtHaltestelle.MaxLength == 20)
+                            cmd = "zI5";
+                        else if (txtHaltestelle.MaxLength == 24)
+                            cmd = "zI6";
+                        else if (txtHaltestelle.MaxLength == 28)
+                            cmd = "zI7";
+                        else if (txtHaltestelle.MaxLength == 32)
+                            cmd = "zI8";
+                        else if (txtHaltestelle.MaxLength == 36)
+                            cmd = "zI9";
+                        else if (txtHaltestelle.MaxLength == 40)
+                            cmd = "zI:";
+                        else if (txtHaltestelle.MaxLength == 44)
+                            cmd = "zI;";
+                        else if (txtHaltestelle.MaxLength == 48)
+                            cmd = "zI<";
+                        comm.WriteIbisData(cmd + leftalignedString(replaceString(txtHaltestelle.Text, '@', '\n'), txtHaltestelle.MaxLength));
+                    }
+                    else if (mnuHSAds009.IsChecked == true)
+                        comm.WriteIbisData("v" + centerString(txtHaltestelle.Text, txtHaltestelle.MaxLength));
                 }
                 if (cbRAW.IsChecked == true)
                 {
-                    comm.WriteIbisData(centerString(txtRAW.Text, txtRAW.MaxLength));
+                    comm.WriteIbisData(txtRAW.Text);
                 }
             }
         }
@@ -187,12 +326,14 @@ namespace IBISui
             {
                 isTimer = true;
                 myTimer.Enabled = true; // Enable it
+                pbTime.Visibility = Visibility.Visible;
                 sendIBIS();
             }
             else
             {
                 isTimer = false;
                 myTimer.Enabled = false; // Disable it
+                pbTime.Visibility = Visibility.Hidden;
             }
         }
 
@@ -200,66 +341,73 @@ namespace IBISui
         {
             if (isTimer == true)
             {
-                this.Dispatcher.Invoke((Action)delegate ()
+                if (timeLeft > 0)
                 {
-                    this.sendIBIS();
-                });
-
+                    timeLeft--;
+                    this.Dispatcher.Invoke((Action)delegate ()
+                    {
+                        pbTime.Value = (timerInterval / 1000 - timeLeft) / (timerInterval / 1000) * 100;
+                    });
+                }
+                else
+                {
+                    timeLeft = timerInterval / 1000;
+                    this.Dispatcher.Invoke((Action)delegate ()
+                    {
+                        this.sendIBIS();
+                        pbTime.Value = 100;
+                    });
+                }
+                myTimer.Enabled = true;
             }
         }
 
-        private void mnuTimer_Click(object sender, RoutedEventArgs e)
+        private void updateUI()
         {
+            cbWiederhole.Content = "Datensatz alle " + Props.Timer/1000 + "s Senden";
+            btnSenden.Content = "Senden " + Props.ComPort;
 
-        }
-
-        private void mnuHSA_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void cbHaltestelle_Click(object sender, RoutedEventArgs e)
-        {
+            cbHaltestelle.Content = "Haltestelle (" + Props.HSA + ") " + Props.HSAlen + " Zeichen";
             if (cbHaltestelle.IsChecked == true)
             {
+                lblHaltestelle.Visibility = Visibility.Visible;
                 txtHaltestelle.Visibility = Visibility.Visible;
             }
             else
             {
+                lblHaltestelle.Visibility = Visibility.Collapsed;
                 txtHaltestelle.Visibility = Visibility.Collapsed;
             }
-        }
-
-        private void cbZieltext3_4_Click(object sender, RoutedEventArgs e)
-        {
-            if (cbZieltext3_4.IsChecked == true)
+            cbZieltext.Content = "Zieltext (" + Props.ZA + ")";
+            if (cbZieltext.IsChecked == true)
             {
-                txtZieltext3.Visibility = Visibility.Visible;
-                txtZieltext4.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                txtZieltext3.Visibility = Visibility.Collapsed;
-                txtZieltext4.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void cbZieltext1_2_Click(object sender, RoutedEventArgs e)
-        {
-            if (cbZieltext1_2.IsChecked == true)
-            {
+                lblZieltext1.Visibility = Visibility.Visible;
                 txtZieltext1.Visibility = Visibility.Visible;
+                lblZieltext2.Visibility = Visibility.Visible;
                 txtZieltext2.Visibility = Visibility.Visible;
             }
             else
             {
+                lblZieltext1.Visibility = Visibility.Collapsed;
                 txtZieltext1.Visibility = Visibility.Collapsed;
+                lblZieltext2.Visibility = Visibility.Collapsed;
                 txtZieltext2.Visibility = Visibility.Collapsed;
             }
-        }
-
-        private void cbLiniennummer_Click(object sender, RoutedEventArgs e)
-        {
+            if (mnuZAds003aMAS.IsChecked == true && cbZieltext.IsChecked == true )
+            {
+                lblZieltext3.Visibility = Visibility.Visible;
+                txtZieltext3.Visibility = Visibility.Visible;
+                lblZieltext4.Visibility = Visibility.Visible;
+                txtZieltext4.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lblZieltext3.Visibility = Visibility.Collapsed;
+                txtZieltext3.Visibility = Visibility.Collapsed;
+                lblZieltext4.Visibility = Visibility.Collapsed;
+                txtZieltext4.Visibility = Visibility.Collapsed;
+            }
+            cbLiniennummer.Content = "Liniennummer (" + Props.LA + ")";
             if (cbLiniennummer.IsChecked == true)
             {
                 txtLiniennummer.Visibility = Visibility.Visible;
@@ -268,10 +416,6 @@ namespace IBISui
             {
                 txtLiniennummer.Visibility = Visibility.Collapsed;
             }
-        }
-
-        private void cbSonderzeichen_Click(object sender, RoutedEventArgs e)
-        {
             if (cbSonderzeichen.IsChecked == true)
             {
                 txtSonderzeichen.Visibility = Visibility.Visible;
@@ -280,59 +424,74 @@ namespace IBISui
             {
                 txtSonderzeichen.Visibility = Visibility.Collapsed;
             }
-        }
-
-        private void cbRAW_Click(object sender, RoutedEventArgs e)
-        {
+            if (cbWagennummer.IsChecked == true)
+            {
+                txtWagennummer.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                txtWagennummer.Visibility = Visibility.Collapsed;
+            }
             if (cbRAW.IsChecked == true)
             {
+                lblRAW.Visibility = Visibility.Visible;
                 txtRAW.Visibility = Visibility.Visible;
             }
             else
             {
+                lblRAW.Visibility = Visibility.Collapsed;
                 txtRAW.Visibility = Visibility.Collapsed;
             }
-
         }
 
-        private void mnuTimer5s_Click(object sender, RoutedEventArgs e)
+        private void cbHaltestelle_Click(object sender, RoutedEventArgs e)
         {
-            myTimer.Interval = 5000;
-            mnuTimer5s.IsChecked = true;
-            mnuTimer10s.IsChecked = false;
-            mnuTimer20s.IsChecked = false;
-            mnuTimer30s.IsChecked = false;
-
+            Props.Haltestelle = cbHaltestelle.IsChecked.Value;
+            this.updateUI();
         }
 
-        private void mnuTimer10s_Click(object sender, RoutedEventArgs e)
+        private void cbZieltext_Click(object sender, RoutedEventArgs e)
         {
-            myTimer.Interval = 10000;
-            mnuTimer5s.IsChecked = false;
-            mnuTimer10s.IsChecked = true;
-            mnuTimer20s.IsChecked = false;
-            mnuTimer30s.IsChecked = false;
-
+            Props.Zieltext = cbZieltext.IsChecked.Value;
+            this.updateUI();
         }
 
-        private void mnuTimer20s_Click(object sender, RoutedEventArgs e)
+        private void cbLiniennummer_Click(object sender, RoutedEventArgs e)
         {
-            myTimer.Interval = 20000;
-            mnuTimer5s.IsChecked = false;
-            mnuTimer10s.IsChecked = false;
-            mnuTimer20s.IsChecked = true;
-            mnuTimer30s.IsChecked = false;
-
+            Props.Liniennummer = cbLiniennummer.IsChecked.Value;
+            this.updateUI();
         }
 
-        private void mnuTimer30s_Click(object sender, RoutedEventArgs e)
+        private void cbSonderzeichen_Click(object sender, RoutedEventArgs e)
         {
-            myTimer.Interval = 30000;
-            mnuTimer5s.IsChecked = false;
-            mnuTimer10s.IsChecked = false;
-            mnuTimer20s.IsChecked = false;
-            mnuTimer30s.IsChecked = true;
+            Props.Sonderzeichen = cbSonderzeichen.IsChecked.Value;
+            this.updateUI();
+        }
 
+        private void cbWagennummer_Click(object sender, RoutedEventArgs e)
+        {
+            Props.Wagennummer = cbWagennummer.IsChecked.Value;
+            this.updateUI();
+        }
+
+        private void cbRAW_Click(object sender, RoutedEventArgs e)
+        {
+            Props.RAW = cbRAW.IsChecked.Value;
+            this.updateUI();
+        }
+
+        private void mnuTimer_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (MenuItem item in mnuTimer.Items)
+            {
+                item.IsChecked = false;
+            }
+
+            MenuItem mi = e.Source as MenuItem;
+            mi.IsChecked = true;
+            Props.Timer = Convert.ToInt64(mi.Header.ToString()) * 1000.0;
+            timerInterval = Props.Timer;
+            this.updateUI();
         }
 
         private void txtZieltext1_TextChanged(object sender, TextChangedEventArgs e)
@@ -343,7 +502,6 @@ namespace IBISui
         private void txtZieltext2_TextChanged(object sender, TextChangedEventArgs e)
         {
             lblZieltext2.Content = txtZieltext2.Text.Length;
-
         }
 
         private void txtZieltext3_TextChanged(object sender, TextChangedEventArgs e)
@@ -364,6 +522,77 @@ namespace IBISui
         private void txtRAW_TextChanged(object sender, TextChangedEventArgs e)
         {
             lblRAW.Content = txtRAW.Text.Length;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Props.Save();
+            Props.Reload();
+        }
+
+        private void mnuHSAds003c_Click(object sender, RoutedEventArgs e)
+        {
+            mnuHSAds003c.IsChecked = true;
+            mnuHSAds009.IsChecked = false;
+            Props.HSA = "ds003c";
+            this.updateUI();
+        }
+
+        private void mnuHSAds009_Click(object sender, RoutedEventArgs e)
+        {
+            mnuHSAds003c.IsChecked = false;
+            mnuHSAds009.IsChecked = true;
+            Props.HSA = "ds009";
+            this.updateUI();
+        }
+
+        private void mnuZAds003a_Click(object sender, RoutedEventArgs e)
+        {
+            mnuZAds003a.IsChecked = true;
+            mnuZAds003aMAS.IsChecked = false;
+            Props.ZA = "ds003a";
+            this.updateUI();
+        }
+
+        private void mnuZAds003aMAS_Click(object sender, RoutedEventArgs e)
+        {
+            mnuZAds003a.IsChecked = false;
+            mnuZAds003aMAS.IsChecked = true;
+            Props.ZA = "ds3aMAS";
+            this.updateUI();
+        }
+
+        private void mnuLAds001_Click(object sender, RoutedEventArgs e)
+        {
+            mnuLAds001.IsChecked = true;
+            mnuLAds001neu.IsChecked = false;
+            txtLiniennummer.Text = "000";
+            Props.LA = "ds001";
+            this.updateUI();
+        }
+
+        private void mnuLAds001neu_Click(object sender, RoutedEventArgs e)
+        {
+            mnuLAds001.IsChecked = false;
+            mnuLAds001neu.IsChecked = true;
+            txtLiniennummer.Text = "0000";
+            Props.LA = "ds001neu";
+            this.updateUI();
+        }
+
+
+        private void mnuHSAlen_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (MenuItem item in mnuHSAlen.Items)
+            {
+                item.IsChecked = false;
+            }
+
+            MenuItem mi = e.Source as MenuItem;
+            mi.IsChecked = true;
+            Props.HSAlen = mi.Header.ToString();
+            txtHaltestelle.MaxLength = Convert.ToInt32(Props.HSAlen);
+            this.updateUI();
         }
     }
 }

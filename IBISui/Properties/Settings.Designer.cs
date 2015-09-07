@@ -22,5 +22,149 @@ namespace IBISui.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
+        public string ComPort {
+            get {
+                return ((string)(this["ComPort"]));
+            }
+            set {
+                this["ComPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public double Timer {
+            get {
+                return ((double)(this["Timer"]));
+            }
+            set {
+                this["Timer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Liniennummer {
+            get {
+                return ((bool)(this["Liniennummer"]));
+            }
+            set {
+                this["Liniennummer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Sonderzeichen {
+            get {
+                return ((bool)(this["Sonderzeichen"]));
+            }
+            set {
+                this["Sonderzeichen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Zieltext {
+            get {
+                return ((bool)(this["Zieltext"]));
+            }
+            set {
+                this["Zieltext"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Haltestelle {
+            get {
+                return ((bool)(this["Haltestelle"]));
+            }
+            set {
+                this["Haltestelle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RAW {
+            get {
+                return ((bool)(this["RAW"]));
+            }
+            set {
+                this["RAW"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ds009")]
+        public string HSA {
+            get {
+                return ((string)(this["HSA"]));
+            }
+            set {
+                this["HSA"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ds003a")]
+        public string ZA {
+            get {
+                return ((string)(this["ZA"]));
+            }
+            set {
+                this["ZA"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ds001")]
+        public string LA {
+            get {
+                return ((string)(this["LA"]));
+            }
+            set {
+                this["LA"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        public string HSAlen {
+            get {
+                return ((string)(this["HSAlen"]));
+            }
+            set {
+                this["HSAlen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Wagennummer {
+            get {
+                return ((bool)(this["Wagennummer"]));
+            }
+            set {
+                this["Wagennummer"] = value;
+            }
+        }
     }
 }

@@ -132,11 +132,20 @@ namespace IBIScmdline
             char ibisParity;
             //first make sure the port is open
             //if its not open then open it
-            if (!(comPort.IsOpen == true)) comPort.Open();
+            try
+            {
+                if (!(comPort.IsOpen == true)) comPort.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             // replace special characters in string 
             ibisSCMsg = ReplaceIbisSC(msg);
             // calculate parity Byte
             ibisParity = GetIbisParity(ibisSCMsg + '\r');
+            //display the data to the user
+            Console.WriteLine("out> " + ibisSCMsg + "<CR>" + "<" + Convert.ToString(ibisParity, 16) + ">");
             if (_emulate7e1 == true)
             {
                 // emulate even parity
@@ -156,7 +165,7 @@ namespace IBIScmdline
                     System.Threading.Thread.Sleep(20);
                 }
                 //display the data to the user
-                Console.WriteLine("out> " + ByteToHex(ibisSndMsg) );
+                //Console.WriteLine("out> " + ByteToHex(ibisSndMsg) );
             }
             catch (Exception ex)
             {
