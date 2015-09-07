@@ -17,4 +17,4 @@ Programmme zum Senden von Nachrichten an IBIS kompatible (VDV 300) Flip-Dot Anze
 * .NET 4.0, VisualStudio 2015
 
 Eine lauffähige Version der IBISui kann hier heruntergeladen werden:
-[IBISui](http://www.robotfreal.de/IBISui/publish.htm)
+[IBISui](http://www.robotfreak.de/IBISui/publish.htm)
