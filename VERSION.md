@@ -1,5 +1,11 @@
 #Versionen IBISui
 
+##v1.0.0.12 vom 08.09.2015
+
+* IBIS Funktionen in eigene Klasse IBISutils.cs
+* Serialmanager.cs nur noch 1x vorhanden
+* Dokumentation der IBISutils Klasse
+
 ##v1.0.0.11 vom 08.09.2015
 
 * Bugfix: Wagennummer 4 stellig
