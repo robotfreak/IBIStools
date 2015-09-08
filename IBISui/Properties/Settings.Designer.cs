@@ -97,7 +97,7 @@ namespace IBISui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool RAW {
             get {
                 return ((bool)(this["RAW"]));
@@ -109,7 +109,7 @@ namespace IBISui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ds009")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ds003c")]
         public string HSA {
             get {
                 return ((string)(this["HSA"]));
@@ -121,7 +121,7 @@ namespace IBISui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ds003a")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ds3aMASctrl")]
         public string ZA {
             get {
                 return ((string)(this["ZA"]));
@@ -145,7 +145,7 @@ namespace IBISui.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        [global::System.Configuration.DefaultSettingValueAttribute("48")]
         public string HSAlen {
             get {
                 return ((string)(this["HSAlen"]));

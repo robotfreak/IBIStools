@@ -5,39 +5,40 @@
     <StackPanel Margin="0,10,1.2,0" VerticalAlignment="Top" Height="642">
         <Menu HorizontalAlignment="Left" Height="30" Margin="0,0,-163.6,0" VerticalAlignment="Top" Width="1186" Grid.ColumnSpan="2">
             <MenuItem x:Name="mnuFile" Header="File">
-                <MenuItem x:Name="mnuOpen" Header="Open" HorizontalAlignment="Left" Width="144.8" Click="dlgOpenFile"/>
-                <MenuItem x:Name="mnuSave" Header="Save" HorizontalAlignment="Left" Width="144.8" Click="dlgFileSave"/>
+                <MenuItem x:Name="mnuOpen" Header="Open" HorizontalAlignment="Left" Click="dlgOpenFile"/>
+                <MenuItem x:Name="mnuSave" Header="Save" HorizontalAlignment="Left" Click="dlgFileSave"/>
             </MenuItem>
             <MenuItem x:Name="mnuSetup" Header="Setup">
-                <MenuItem x:Name="mnuLA" Header="LA Typ" HorizontalAlignment="Left" Width="144.8" ToolTip="Liniennummer Anzeige Typ">
-                    <MenuItem x:Name="mnuLAds001" Header="ds001" HorizontalAlignment="Left" Width="144.8" Click="mnuLAds001_Click" />
-                    <MenuItem x:Name="mnuLAds001neu" Header="ds001neu" HorizontalAlignment="Left" Width="144.8" Click="mnuLAds001neu_Click" />
+                <MenuItem x:Name="mnuLA" Header="LA Typ" HorizontalAlignment="Left" Width="145" ToolTip="Liniennummer Anzeige Typ">
+                    <MenuItem x:Name="mnuLAds001" Header="ds001" HorizontalAlignment="Left"  Click="mnuLAds001_Click" />
+                    <MenuItem x:Name="mnuLAds001neu" Header="ds001neu" HorizontalAlignment="Left"  Click="mnuLAds001neu_Click" />
                 </MenuItem>
-                <MenuItem x:Name="mnuZA" Header="ZA Typ" HorizontalAlignment="Left" Width="144.8" ToolTip="Zielanzeige Typ">
-                    <MenuItem x:Name="mnuZAds003a" Header="ds003a" HorizontalAlignment="Left" Width="144.8" Click="mnuZAds003a_Click" />
-                    <MenuItem x:Name="mnuZAds003aMAS" Header="ds3aMAS" HorizontalAlignment="Left" Width="144.8" Click="mnuZAds003aMAS_Click" />
+                <MenuItem x:Name="mnuZA" Header="ZA Typ" HorizontalAlignment="Left" Width="145" ToolTip="Zielanzeige Typ">
+                    <MenuItem x:Name="mnuZAds003a" Header="ds003a" HorizontalAlignment="Left" Click="mnuZAds003a_Click" />
+                    <MenuItem x:Name="mnuZAds003aMAS" Header="ds3aMAS" HorizontalAlignment="Left" Click="mnuZAds003aMAS_Click" />
+                    <MenuItem x:Name="mnuZAds003aMASctrl" Header="ds3aMAS Control" HorizontalAlignment="Left" Click="mnuZAds003aMASctrl_Click" />
                 </MenuItem>
-                <MenuItem x:Name="mnuHSA" Header="HSA Typ" HorizontalAlignment="Left" Width="144.8" ToolTip="Haltestellenanzeige Typ">
-                    <MenuItem x:Name="mnuHSAds003c" Header="ds003c" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAds003c_Click"/>
-                    <MenuItem x:Name="mnuHSAds009" Header="ds009" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAds009_Click"/>
+                <MenuItem x:Name="mnuHSA" Header="HSA Typ" HorizontalAlignment="Left" Width="145" ToolTip="Haltestellenanzeige Typ">
+                    <MenuItem x:Name="mnuHSAds003c" Header="ds003c" HorizontalAlignment="Left" Click="mnuHSAds003c_Click"/>
+                    <MenuItem x:Name="mnuHSAds009" Header="ds009" HorizontalAlignment="Left" Click="mnuHSAds009_Click"/>
                 </MenuItem>
-                <MenuItem x:Name="mnuHSAlen" Header="HSA Länge" HorizontalAlignment="Left" Width="144.8" ToolTip="Haltestellenanzeige Länge">
-                    <MenuItem x:Name="mnuHSAlen16" Header="16" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen20" Header="20" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen24" Header="24" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen28" Header="28" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen32" Header="32" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen36" Header="36" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen40" Header="40" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen44" Header="44" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
-                    <MenuItem x:Name="mnuHSAlen48" Header="48" HorizontalAlignment="Left" Width="144.8" Click="mnuHSAlen_Click" />
+                <MenuItem x:Name="mnuHSAlen" Header="HSA Länge" HorizontalAlignment="Left" Width="145" ToolTip="Haltestellenanzeige Länge">
+                    <MenuItem x:Name="mnuHSAlen16" Header="16" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen20" Header="20" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen24" Header="24" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen28" Header="28" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen32" Header="32" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen36" Header="36" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen40" Header="40" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen44" Header="44" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
+                    <MenuItem x:Name="mnuHSAlen48" Header="48" HorizontalAlignment="Left" Click="mnuHSAlen_Click" />
                 </MenuItem>
-                <MenuItem x:Name="mnuSerial" Header="Serial" HorizontalAlignment="Left" Width="144.8" Click="mnuSerial_Click" ToolTip="Serieller Port Auswahl"/>
-                <MenuItem x:Name="mnuTimer" Header="Timer" HorizontalAlignment="Left" Width="144.8" ToolTip="Wiederhol Zeit für Datensatz dauerhaft Senden" >
-                    <MenuItem x:Name="mnuTimer5s" Header="5" HorizontalAlignment="Left" Width="144.8" Click="mnuTimer_Click"/>
-                    <MenuItem x:Name="mnuTimer10s" Header="10" HorizontalAlignment="Left" Width="144.8" Click="mnuTimer_Click"/>
-                    <MenuItem x:Name="mnuTimer20s" Header="20" HorizontalAlignment="Left" Width="144.8" Click="mnuTimer_Click"/>
-                    <MenuItem x:Name="mnuTimer30s" Header="30" HorizontalAlignment="Left" Width="144.8" Click="mnuTimer_Click"/>
+                <MenuItem x:Name="mnuSerial" Header="Serial" HorizontalAlignment="Left" Width="145" Click="mnuSerial_Click" ToolTip="Serieller Port Auswahl"/>
+                <MenuItem x:Name="mnuTimer" Header="Timer" HorizontalAlignment="Left" Width="145" ToolTip="Wiederhol Zeit für Datensatz dauerhaft Senden" >
+                    <MenuItem x:Name="mnuTimer5s" Header="5" HorizontalAlignment="Left" Click="mnuTimer_Click"/>
+                    <MenuItem x:Name="mnuTimer10s" Header="10" HorizontalAlignment="Left" Click="mnuTimer_Click"/>
+                    <MenuItem x:Name="mnuTimer20s" Header="20" HorizontalAlignment="Left" Click="mnuTimer_Click"/>
+                    <MenuItem x:Name="mnuTimer30s" Header="30" HorizontalAlignment="Left" Click="mnuTimer_Click"/>
                 </MenuItem>
             </MenuItem>
         </Menu>
@@ -54,9 +55,9 @@
             <CheckBox x:Name="cbSonderzeichen" Content="Sonderzeichen" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,1,0,0" Height="16" Width="100" Click="cbSonderzeichen_Click" ToolTip="Sonderzeichen Anzeige"/>
             <TextBox x:Name="txtSonderzeichen" HorizontalAlignment="Left" Height="58" Margin="0,1,0,0" TextWrapping="Wrap" Text="00" VerticalAlignment="Top" Width="78" FontSize="48" FontFamily="CourierPS" MaxLength="2" PreviewTextInput="txtBox_PreviewTextInput"/>
             <CheckBox x:Name="cbWagennummer" Content="Wagennummer" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,1,0,0" Height="16" Width="110" Click="cbWagennummer_Click" ToolTip="Sonderzeichen Anzeige"/>
-            <TextBox x:Name="txtWagennummer" HorizontalAlignment="Left" Height="58" Margin="0,1,0,0" TextWrapping="Wrap" Text="00000" VerticalAlignment="Top" Width="158" FontSize="48" FontFamily="CourierPS" MaxLength="5" PreviewTextInput="txtBox_PreviewTextInput"/>
+            <TextBox x:Name="txtWagennummer" HorizontalAlignment="Left" Height="58" Margin="0,1,0,0" TextWrapping="Wrap" Text="0000" VerticalAlignment="Top" Width="136" FontSize="48" FontFamily="CourierPS" MaxLength="4" PreviewTextInput="txtBox_PreviewTextInput"/>
         </StackPanel>
-        <CheckBox x:Name="cbZieltext" Content="Zieltext" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.635,0.31" Height="16" Width="142" Click="cbZieltext_Click" ToolTip="Zielanzeige (ZA)"/>
+        <CheckBox x:Name="cbZieltext" Content="Zieltext" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.635,0.31" Height="16" Width="197" Click="cbZieltext_Click" ToolTip="Zielanzeige (ZA)"/>
         <StackPanel Margin="0,10,0,0" Orientation="Horizontal" >
             <Label x:Name="lblZieltext1" Content="0" Width="30" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <TextBox x:Name="txtZieltext1" HorizontalAlignment="Left" Height="58" TextWrapping="Wrap" VerticalAlignment="Top" Width="500" FontSize="48" FontFamily="CourierPS" MaxLength="16" TextAlignment="Center" TextChanged="txtZieltext1_TextChanged"/>

@@ -27,12 +27,14 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://www.robotfreak.de/IBISui/</InstallUrl>
+    <SupportUrl>https://github.com/robotfreak/IBIStools/</SupportUrl>
+    <ErrorReportUrl>https://github.com/robotfreak/IBIStools/issues</ErrorReportUrl>
     <TargetCulture>de-DE</TargetCulture>
     <ProductName>IBISui</ProductName>
     <PublisherName>Peter Recktenwald</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

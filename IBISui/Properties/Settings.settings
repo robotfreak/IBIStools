@@ -21,19 +21,19 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="RAW" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="HSA" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ds009</Value>
+      <Value Profile="(Default)">ds003c</Value>
     </Setting>
     <Setting Name="ZA" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ds003a</Value>
+      <Value Profile="(Default)">ds3aMASctrl</Value>
     </Setting>
     <Setting Name="LA" Type="System.String" Scope="User">
       <Value Profile="(Default)">ds001</Value>
     </Setting>
     <Setting Name="HSAlen" Type="System.String" Scope="User">
-      <Value Profile="(Default)">24</Value>
+      <Value Profile="(Default)">48</Value>
     </Setting>
     <Setting Name="Wagennummer" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
