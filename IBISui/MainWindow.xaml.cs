@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Timers;
 using System.IO.Ports;
 
-using IBIScmdline;
+using IBISutilities;
 
 namespace IBISui
 {
@@ -16,6 +16,7 @@ namespace IBISui
     {
         Properties.Settings Props = null;
         SerialManager comm = new SerialManager();
+        IBISutils utils = new IBISutils();
         static Timer myTimer;
         Boolean isTimer = false;
         private double timerInterval, timeLeft;
@@ -202,57 +203,7 @@ namespace IBISui
             updateUI();
         }
 
-        private string dec2hexString(string s)
-        {
-            int x = 0;
-            Int32.TryParse(s, out x);
-            string xstr = x.ToString("X4");
-            char[] chars = xstr.ToCharArray();
-            for (int i = 0; i < chars.Length; i++)
-            {
-                if (chars[i] == 'A') chars[i] = ':';
-                if (chars[i] == 'B') chars[i] = ';';
-                if (chars[i] == 'C') chars[i] = '<';
-                if (chars[i] == 'D') chars[i] = '=';
-                if (chars[i] == 'E') chars[i] = '>';
-                if (chars[i] == 'F') chars[i] = '?';
-            }
-            return new string (chars);
-        }
-
-        private string fillDecimalString(string s, int desiredLength)
-        {
-            if (s.Length >= desiredLength) return s;
-            return s.PadLeft(desiredLength, '0');
-        }
-
-        private string leftalignedString(string s, int desiredLength)
-        {
-            if (s.Length >= desiredLength) return s;
-            return s.PadRight(desiredLength);
-        }
-
-        private string centerString(string s, int desiredLength)
-        {
-            if (s.Length >= desiredLength) return s;
-            int firstpad = (s.Length + desiredLength) / 2;
-            return s.PadLeft(firstpad).PadRight(desiredLength);
-        }
-
-        private string replaceString(string input, char csrc, char cdst)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-            char[] chars = input.ToCharArray();
-
-            for (int i = 0; i < chars.Length; i++)
-            {
-                if (chars[i] == csrc) chars[i] = cdst;
-            }
-            return new string(chars);
-        }
+ 
 
         private void sendIBIS()
         {
@@ -274,11 +225,11 @@ namespace IBISui
                 {
                     if (mnuLAds001.IsChecked == true)
                     {
-                        comm.WriteIbisData("l" + fillDecimalString(txtLiniennummer.Text, 3));
+                        comm.WriteIbisData("l" + utils.fillDecimalString(txtLiniennummer.Text, 3));
                     }
                     else if (mnuLAds001neu.IsChecked == true)
                     {
-                        comm.WriteIbisData("q" + fillDecimalString(txtLiniennummer.Text, 4));
+                        comm.WriteIbisData("q" + utils.fillDecimalString(txtLiniennummer.Text, 4));
                     }
                 }
                 if (cbSonderzeichen.IsChecked == true)
@@ -288,37 +239,45 @@ namespace IBISui
                         if (txtSonderzeichen.Text == "00")
                             comm.WriteIbisData("lE" + "94");
                         else
-                            comm.WriteIbisData("lE" + fillDecimalString(txtSonderzeichen.Text, 2));
+                            comm.WriteIbisData("lE" + utils.fillDecimalString(txtSonderzeichen.Text, 2));
                     }
                     else if (mnuLAds001neu.IsChecked == true)
                     {
                         if (txtSonderzeichen.Text == "00")
                             comm.WriteIbisData("qE" + "94");
                         else
-                            comm.WriteIbisData("qE" + fillDecimalString(txtSonderzeichen.Text, 2));
+                            comm.WriteIbisData("qE" + utils.fillDecimalString(txtSonderzeichen.Text, 2));
                     }
                 }
                 if (cbWagennummer.IsChecked == true)
                 {
-                    comm.WriteIbisData("nB" + dec2hexString(txtWagennummer.Text));
+                    comm.WriteIbisData("nB" + utils.dec2hexString(txtWagennummer.Text));
                 }
                 if (mnuZAds003aMAS.IsChecked == true && cbZieltext.IsChecked == true)
                 {
                     if (cbLiniennummer.IsChecked == false && cbSonderzeichen.IsChecked == false)
                         comm.WriteIbisData("lE" + "94");
-                    comm.WriteIbisData("zA4" + centerString(txtZieltext1.Text, txtZieltext1.MaxLength) + centerString(txtZieltext2.Text, txtZieltext2.MaxLength) + centerString(txtZieltext3.Text, txtZieltext3.MaxLength) + centerString(txtZieltext4.Text, txtZieltext4.MaxLength));
+                    comm.WriteIbisData("zA4" + utils.centerString(txtZieltext1.Text, txtZieltext1.MaxLength) + 
+                                               utils.centerString(txtZieltext2.Text, txtZieltext2.MaxLength) + 
+                                               utils.centerString(txtZieltext3.Text, txtZieltext3.MaxLength) + 
+                                               utils.centerString(txtZieltext4.Text, txtZieltext4.MaxLength));
                 }
                 else if (mnuZAds003a.IsChecked == true && cbZieltext.IsChecked == true)
                 {
                     if (cbLiniennummer.IsChecked == false && cbSonderzeichen.IsChecked == false)
                         comm.WriteIbisData("lE" + "94");
-                    comm.WriteIbisData("zA2" + centerString(txtZieltext1.Text, txtZieltext1.MaxLength) + centerString(txtZieltext2.Text, txtZieltext2.MaxLength));
+                    comm.WriteIbisData("zA2" + utils.centerString(txtZieltext1.Text, txtZieltext1.MaxLength) +
+                                               utils.centerString(txtZieltext2.Text, txtZieltext2.MaxLength));
                 }
                 else if (mnuZAds003aMASctrl.IsChecked == true && cbZieltext.IsChecked == true)
                 {
                     if (cbLiniennummer.IsChecked == false && cbSonderzeichen.IsChecked == false)
                         comm.WriteIbisData("lE" + "94");
-                    comm.WriteIbisData("zA5" + leftalignedString(txtZieltext1.Text, txtZieltext1.MaxLength) + leftalignedString(txtZieltext2.Text, txtZieltext2.MaxLength) + leftalignedString(txtZieltext3.Text, txtZieltext3.MaxLength) + leftalignedString(txtZieltext4.Text, txtZieltext4.MaxLength) + "\n.BI@MBI@M      ");
+                    comm.WriteIbisData("zA5" + utils.leftalignedString(txtZieltext1.Text, txtZieltext1.MaxLength) +
+                                               utils.leftalignedString(txtZieltext2.Text, txtZieltext2.MaxLength) +
+                                               utils.leftalignedString(txtZieltext3.Text, txtZieltext3.MaxLength) +
+                                               utils.leftalignedString(txtZieltext4.Text, txtZieltext4.MaxLength) + 
+                                               "\n.BI@MBI@M      ");
                 }
                 if (cbHaltestelle.IsChecked == true)
                 {
@@ -343,10 +302,10 @@ namespace IBISui
                             cmd = "zI;";
                         else if (txtHaltestelle.MaxLength == 48)
                             cmd = "zI<";
-                        comm.WriteIbisData(cmd + leftalignedString(replaceString(txtHaltestelle.Text, '@', '\n'), txtHaltestelle.MaxLength));
+                        comm.WriteIbisData(cmd + utils.leftalignedString(utils.replaceString(txtHaltestelle.Text, '@', '\n'), txtHaltestelle.MaxLength));
                     }
                     else if (mnuHSAds009.IsChecked == true)
-                        comm.WriteIbisData("v" + centerString(txtHaltestelle.Text, txtHaltestelle.MaxLength));
+                        comm.WriteIbisData("v" + utils.centerString(txtHaltestelle.Text, txtHaltestelle.MaxLength));
                 }
                 if (cbRAW.IsChecked == true)
                 {
@@ -425,6 +384,13 @@ namespace IBISui
                 txtZieltext1.Visibility = Visibility.Visible;
                 lblZieltext2.Visibility = Visibility.Visible;
                 txtZieltext2.Visibility = Visibility.Visible;
+                if ((mnuZAds003aMAS.IsChecked == true || mnuZAds003aMASctrl.IsChecked == true) )
+                {
+                    lblZieltext3.Visibility = Visibility.Visible;
+                    txtZieltext3.Visibility = Visibility.Visible;
+                    lblZieltext4.Visibility = Visibility.Visible;
+                    txtZieltext4.Visibility = Visibility.Visible;
+                }
             }
             else
             {
@@ -432,16 +398,6 @@ namespace IBISui
                 txtZieltext1.Visibility = Visibility.Collapsed;
                 lblZieltext2.Visibility = Visibility.Collapsed;
                 txtZieltext2.Visibility = Visibility.Collapsed;
-            }
-            if ((mnuZAds003aMAS.IsChecked == true || mnuZAds003aMASctrl.IsChecked == true) && cbZieltext.IsChecked == true )
-            {
-                lblZieltext3.Visibility = Visibility.Visible;
-                txtZieltext3.Visibility = Visibility.Visible;
-                lblZieltext4.Visibility = Visibility.Visible;
-                txtZieltext4.Visibility = Visibility.Visible;
-            }
-            else
-            {
                 lblZieltext3.Visibility = Visibility.Collapsed;
                 txtZieltext3.Visibility = Visibility.Collapsed;
                 lblZieltext4.Visibility = Visibility.Collapsed;

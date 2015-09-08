@@ -108,6 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IBISutils.cs" />
     <Compile Include="SerialManager.cs" />
     <Compile Include="Settings.cs" />
     <Page Include="MainWindow.xaml">

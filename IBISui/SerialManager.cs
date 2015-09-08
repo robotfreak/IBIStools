@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.IO.Ports;
 
-
-namespace IBIScmdline
+namespace IBISutilities
 {
     class SerialManager
     {
@@ -22,6 +17,7 @@ namespace IBIScmdline
         //global manager variables
         //private Color[] MessageColor = { Color.Blue, Color.Green, Color.Black, Color.Orange, Color.Red };
         private SerialPort comPort = new SerialPort();
+        private IBISutils utils = new IBISutils();
         #endregion
 
         #region Manager Properties
@@ -141,15 +137,15 @@ namespace IBIScmdline
                 Console.WriteLine(ex.Message);
             }
             // replace special characters in string 
-            ibisSCMsg = ReplaceIbisSC(msg);
+            ibisSCMsg = utils.ReplaceIbisSC(msg);
             // calculate parity Byte
-            ibisParity = GetIbisParity(ibisSCMsg + '\r');
+            ibisParity = utils.GetIbisParity(ibisSCMsg + '\r');
             //display the data to the user
             Console.WriteLine("out> " + ibisSCMsg + "<CR>" + "<" + Convert.ToString(ibisParity, 16) + ">");
             if (_emulate7e1 == true)
             {
                 // emulate even parity
-                ibisSndMsg = EmulateEvenParity(ibisSCMsg + '\r' + ibisParity);
+                ibisSndMsg = utils.EmulateEvenParity(ibisSCMsg + '\r' + ibisParity);
             }
             else
             {
@@ -174,85 +170,6 @@ namespace IBIScmdline
         }
         #endregion
 
-        #region ReplaceIbisSC
-        private string ReplaceIbisSC(string input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-            char[] chars = input.ToCharArray();
-
-            for (int i = 0; i < chars.Length; i++)
-            {
-                if (chars[i] == 'ä') chars[i] = '{';
-                else if (chars[i] == 'ö') chars[i] = '|';
-                else if (chars[i] == 'ü') chars[i] = '}';
-                else if (chars[i] == 'Ä') chars[i] = '[';
-                else if (chars[i] == 'Ö') chars[i] = '\\';
-                else if (chars[i] == 'Ü') chars[i] = ']';
-                else if (chars[i] == 'ß') chars[i] = '~';
-            }
-            return new string(chars);
-        }
-        #endregion
-
-        #region GetIbisParity
-        private char GetIbisParity(string input)
-        {
-            byte p = 0x7F;
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                p ^= bytes[i];
-            }
-            return (char)p;
-        }
-        #endregion
-
-        #region EmulateEvenParity
-        private byte[] EmulateEvenParity(string input)
-        {
-            int cnt;
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                cnt = GetParity(bytes[i]);
-                if (cnt % 2 == 1)  // even parity
-                {
-                    bytes[i] |= (byte)0x80;
-                }
-                else              // odd parity
-                {
-                    bytes[i] &= (byte)0x7F;
-                }
-            }
-            return bytes;
-        }
-        #endregion
-
-        #region GetParity
-        private int GetParity(byte input)
-        {
-            int cnt = 0;
-            for (int i = 0; i < 7; i++)
-            {
-                if ((input & (1 << i)) > 0)
-                    cnt++;
-            }
-            return cnt;
-        }
-        #endregion
 
         #region HexToByte
         /// <summary>
