@@ -3,7 +3,8 @@
 ##v1.0.0.11 vom 08.09.2015
 
 * Bugfix: Wagennummer 4 stellig
-* Bugfix: Liniennummer DS001 immer 3stellig, DS001neu immer 4stellig#
+* Bugfix: Liniennummer DS001 immer 3stellig, DS001neu immer 4stellig
+* Bugfix: wenn Sonderzeichen 00 sende 94
 * Feature: neuer ZA Typ DS03aMAS Control für korrekte zentrierte Ausgabe
 
 ##v1.0.0.10 vom 07.09.2015
